@@ -1,19 +1,22 @@
 package Models;
 
+import Enums.ProductType;
+
 public class Product {
-    private String id;
+    private static int counter=0;
+    private int id;
     private String name;
     private double price;
     private ProductType type;
 
-    public Product(String id, String name, double price, ProductType type) {
-        this.id = id;
+    public Product(String name, double price, ProductType type) {
+        this.id = ++counter;
         this.name = name;
         this.price = price;
         this.type = type;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -25,7 +28,7 @@ public class Product {
         return price;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -47,6 +50,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Produs:" + id + ',' + name + ',' + price + " ron," + type;
+        return "ID: " + id + ", Name: " + name + ", Price: " + price+ ", Type: " + type;
     }
 }

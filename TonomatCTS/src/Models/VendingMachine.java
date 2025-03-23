@@ -1,23 +1,24 @@
 package Models;
 
 public class VendingMachine {
-    private String id;
+    private static int counter=0;
+    private int id;
     private String name;
     private String location;
     private Compartment compartment;
 
-    public VendingMachine(String id, String name, String location, Compartment compartment) {
-        this.id = id;
+    public VendingMachine(String name, String location, Compartment compartment) {
+        this.id = ++counter;
         this.name = name;
         this.location = location;
         this.compartment = compartment;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -41,16 +42,18 @@ public class VendingMachine {
         this.compartment = compartment;
     }
 
-    public boolean addProduct(Product product) {
-        return compartment.addProduct(product);
-    }
-
-
     public void displayProducts() {
         for (Product p : compartment.getProducts()) {
             System.out.println(p);
         }
     }
 
+    public Compartment getCompartment() {
+        return compartment;
+    }
 
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Location: " + location;
+    }
 }

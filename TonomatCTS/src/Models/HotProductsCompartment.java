@@ -1,11 +1,13 @@
 package Models;
 
+import Enums.ProductType;
+
 import java.util.List;
 
 public class HotProductsCompartment extends Compartment {
 
-    public HotProductsCompartment(List<Product> products, int maxCapacity) {
-        super(products, maxCapacity);
+    public HotProductsCompartment( int maxCapacity) {
+        super(maxCapacity);
     }
 
     @Override

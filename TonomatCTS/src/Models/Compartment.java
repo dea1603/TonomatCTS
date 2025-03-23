@@ -4,19 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Compartment {
-    protected List<Product> products;
+    protected List<Product> products = new ArrayList<>();
     protected int maxCapacity;
 
-    public Compartment(List<Product> products, int maxCapacity) {
-        this.products = products;
+    public Compartment(int maxCapacity) {
         this.maxCapacity = maxCapacity;
     }
 
     public abstract boolean addProduct(Product product);
 
-    public Product removeProduct(String id) {
+    public Product removeProduct(int id) {
         for (Product p : products) {
-            if (p.getId().equals(id)) {
+            if (p.getId()==id) {
                 products.remove(p);
                 return p;
             }
