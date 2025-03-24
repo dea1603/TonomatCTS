@@ -64,7 +64,7 @@ public class VendingMachine {
             compartmentType = "Unknown";
         }
 
-        return "Vending Machine: " + name + ", location: " + location + ", compartment type: " + compartmentType;
+        return "Vending Machine: id: "+ id + " nume: " + name + ", location: " + location + ", compartment type: " + compartmentType;
     }
 
 }
