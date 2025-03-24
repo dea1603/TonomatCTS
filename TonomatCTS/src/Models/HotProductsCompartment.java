@@ -11,13 +11,13 @@ public class HotProductsCompartment extends Compartment {
     }
 
     @Override
-    public boolean addProduct(Product product) {
+    public void addProduct(Product product) {
         if ((product.getType() == ProductType.WARM || product.getType() == ProductType.IDK)
                 && products.size() < maxCapacity) {
             products.add(product);
-            return true;
         }
-        return false;
+        else {
+            System.out.println("Produsul "+product.getName()+" nu se poate adauga!");
+        }
     }
-
 }

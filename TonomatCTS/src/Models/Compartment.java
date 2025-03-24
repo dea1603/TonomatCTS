@@ -11,9 +11,9 @@ public abstract class Compartment {
         this.maxCapacity = maxCapacity;
     }
 
-    public abstract boolean addProduct(Product product);
+    public abstract void addProduct(Product product);
 
-    public Product removeProduct(int id) {
+    public Product extractProduct(int id) {
         for (Product p : products) {
             if (p.getId()==id) {
                 products.remove(p);

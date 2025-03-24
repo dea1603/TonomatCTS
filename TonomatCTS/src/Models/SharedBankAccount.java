@@ -15,11 +15,8 @@ public class SharedBankAccount {
         return instance;
     }
 
-    public double getBalance() {
-        return balance;
-    }
 
-    public void deposit(double amount) {
+    public void processPayment(double amount) {
         if (amount > 0) {
             balance += amount;
             System.out.printf("%.2f RON deposited to the shared account. New balance is: %.2f RON%n", amount, balance);
@@ -31,5 +28,4 @@ public class SharedBankAccount {
     public void displayBalance() {
         System.out.printf("Current Shared Account Balance: %.2f RON%n", balance);
     }
-
 }
