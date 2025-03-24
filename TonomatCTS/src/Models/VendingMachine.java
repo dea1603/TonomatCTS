@@ -54,6 +54,17 @@ public class VendingMachine {
 
     @Override
     public String toString() {
-        return "ID: " + id + ", Name: " + name + ", Location: " + location;
+        String compartmentType;
+
+        if (compartment instanceof HotProductsCompartment) {
+            compartmentType = "Hot";
+        } else if (compartment instanceof ColdProductsCompartment) {
+            compartmentType = "Cold";
+        } else {
+            compartmentType = "Unknown";
+        }
+
+        return "Vending Machine: " + name + ", location: " + location + ", compartment type: " + compartmentType;
     }
+
 }

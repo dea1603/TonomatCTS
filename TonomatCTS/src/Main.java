@@ -26,23 +26,33 @@ public class Main {
         vendingMachines.add(vm2);
         vendingMachines.add(vm3);
 
-
-
         while (true) {
             System.out.println("\n=== Meniu ===");
             System.out.println("1. Create a vending machine");
             System.out.println("2. Select a vending machine");
             System.out.println("0. Close the application");
-            System.out.print("Choose: ");
+            System.out.print("Choose (0,1,2): ");
 
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            if (scanner.hasNextInt()) {
+                int option = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (option) {
-                case 1: createVendingMachine(); break;
-                case 2: selectVendingMachine();break;
-                case 0: System.out.println("Closing the application..."); return;
-                default: System.out.println("Invalid option! Please choose again.");
+                switch (option) {
+                    case 1:
+                        createVendingMachine();
+                        break;
+                    case 2:
+                        selectVendingMachine();
+                        break;
+                    case 0:
+                        System.out.println("Closing the application...");
+                        return;
+                    default:
+                        System.out.println("Invalid option! Please choose again.");
+                }
+            } else {
+                String invalidInput = scanner.next();
+                System.out.println("Invalid input! Please choose again.");
             }
         }
     }
@@ -54,35 +64,46 @@ public class Main {
         System.out.print("Insert the location of the vending machine: ");
         String location = scanner.nextLine();
 
-        System.out.println("Choose the maximum capacity of the compartment: ");
+        System.out.println("Choose the maximum capacity of the compartment.");
         System.out.print("Insert capacity: ");
         int compartmentCapacity=scanner.nextInt();
-
-        System.out.println("Choose compartment type:");
-        System.out.println("1. Hot Products Compartment");
-        System.out.println("2. Cold Products Compartment");
-        System.out.print("Choose: ");
-
-        int compartmentOption = scanner.nextInt();
+        scanner.nextLine();
 
         Compartment compartment = null;
 
-        switch (compartmentOption) {
-            case 1: compartment = new HotProductsCompartment(compartmentCapacity);break;
-            case 2: compartment = new ColdProductsCompartment(compartmentCapacity);break;
-            default:
-                System.out.println("Opțiune invalidă pentru compartiment!");
-                return;
+        while (true) {
+            System.out.println("Choose compartment type:");
+            System.out.println("1. Hot Products Compartment");
+            System.out.println("2. Cold Products Compartment");
+            System.out.print("Choose (1/2): ");
+
+            if (scanner.hasNextInt()) {
+                int compartmentOption = scanner.nextInt();
+                scanner.nextLine();
+                if (compartmentOption == 1) {
+                    compartment = new HotProductsCompartment(compartmentCapacity);
+                    break;
+                } else if (compartmentOption == 2) {
+                    compartment = new ColdProductsCompartment(compartmentCapacity);
+                    break;
+                } else {
+                    System.out.println("Invalid input! Please choose 1 or 2.");
+                }
+            } else {
+                scanner.nextLine();
+                System.out.println("Invalid input! Please choose 1 or 2.");
+            }
         }
+
 
         VendingMachine vendingMachine = new VendingMachine(name, location, compartment);
         vendingMachines.add(vendingMachine);
-        System.out.println("Tonomatul a fost creat cu succes!");
+        System.out.println("The vending machine is created!");
     }
 
     private static void showAllVendingMachines(){
         if (vendingMachines.isEmpty()) {
-            System.out.println("There are no vending machines");
+            System.out.println("There are no vending machines!");
         }
         else {
             System.out.println("\n=== All vending machines ===");
@@ -92,25 +113,34 @@ public class Main {
         }
     }
 
-    private static void selectVendingMachine(){
+    private static void selectVendingMachine() {
         showAllVendingMachines();
+
         if (!vendingMachines.isEmpty()) {
-            System.out.print("Choose vending machine: ");
-            int vendingMachineId = scanner.nextInt();
+            System.out.print("Choose vending machine (pick a number): ");
 
-            VendingMachine vendingMachine=vendingMachines.stream()
-                    .filter(vm -> vm.getId() == vendingMachineId)
-                    .findFirst()
-                    .orElse(null);
+            if (scanner.hasNextInt()) {
+                int vendingMachineId = scanner.nextInt();
+                scanner.nextLine();
 
-            if (vendingMachine!=null){
-                vendingMachineMenu(vendingMachine);
-            }
-            else {
-                System.out.println("There is no vending machine with the id "+vendingMachineId);
+                VendingMachine vendingMachine = vendingMachines.stream()
+                        .filter(vm -> vm.getId() == vendingMachineId)
+                        .findFirst()
+                        .orElse(null);
+
+                if (vendingMachine != null) {
+                    vendingMachineMenu(vendingMachine);
+                } else {
+                    System.out.println("There is no vending machine with the id " + vendingMachineId);
+                }
+            } else {
+                String invalidInput = scanner.next();
+                System.out.println("There is no vending machine with the id " + invalidInput);
             }
         }
     }
+
+
 
     private static void vendingMachineMenu(VendingMachine vendingMachine){
         while (true) {
@@ -122,20 +152,41 @@ public class Main {
             System.out.println("5. Move a product to a different vending machine");
             System.out.println("6. Buy a product");
             System.out.println("0. Exit");
-            System.out.print("Choose: ");
+            System.out.print("Choose (0-6): ");
 
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            if (scanner.hasNextInt()) {
+                int option = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (option) {
-                case 1: createProduct(vendingMachine); break;
-                case 2: showAllProducts(vendingMachine);break;
-                case 3: showMostExpensiveProduct(vendingMachine);break;
-                case 4: deleteProduct(vendingMachine);break;
-                case 5: moveProduct(vendingMachine);break;
-                case 6: buyProduct(vendingMachine);break;
-                case 0: System.out.println("Closing the application..."); return;
-                default: System.out.println("Invalid option! Please choose again.");
+                switch (option) {
+                    case 1:
+                        createProduct(vendingMachine);
+                        break;
+                    case 2:
+                        showAllProducts(vendingMachine);
+                        break;
+                    case 3:
+                        showMostExpensiveProduct(vendingMachine);
+                        break;
+                    case 4:
+                        deleteProduct(vendingMachine);
+                        break;
+                    case 5:
+                        moveProduct(vendingMachine);
+                        break;
+                    case 6:
+                        buyProduct(vendingMachine);
+                        break;
+                    case 0:
+                        System.out.println("Closing the application...");
+                        return;
+                    default:
+                        System.out.println("Invalid option! Please choose again.");
+                }
+
+            } else {
+                scanner.nextLine();
+                System.out.println("Invalid input! Please choose again.");
             }
         }
     }
@@ -144,38 +195,71 @@ public class Main {
         System.out.print("Insert product name: ");
         String name = scanner.nextLine();
 
-        System.out.println("Choose product type:");
-        System.out.println("1. WARM");
-        System.out.println("2. COLD");
-        System.out.println("3. IDK ");
-
-        System.out.print("Choose type: ");
-        int typeOption = scanner.nextInt();
-        scanner.nextLine();
-
         ProductType type = null;
-        switch (typeOption) {
-            case 1:
-                type = ProductType.WARM;
+        Compartment comp = vendingMachine.getCompartment();
+        boolean isHotCompartment = comp instanceof HotProductsCompartment;
+
+        while (true) {
+            System.out.println("Choose product type:");
+            System.out.println("1. WARM");
+            System.out.println("2. COLD");
+            System.out.println("3. IDK");
+            System.out.print("Choose type (1,2,3): ");
+
+            if (scanner.hasNextInt()) {
+                int typeOption = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (typeOption) {
+                    case 1:
+                        if (!isHotCompartment) {
+                            System.out.println("This vending machine only accepts COLD or IDK products.");
+                            continue;
+                        }
+                        type = ProductType.WARM;
+                        break;
+
+                    case 2:
+                        if (isHotCompartment) {
+                            System.out.println("This vending machine only accepts WARM or IDK products.");
+                            continue;
+                        }
+                        type = ProductType.COLD;
+                        break;
+
+                    case 3:
+                        type = ProductType.IDK;
+                        break;
+
+                    default:
+                        System.out.println("Invalid type. Please choose 1, 2, or 3.");
+                        continue;
+                }
                 break;
-            case 2:
-                type = ProductType.COLD;
-                break;
-            case 3:
-                type = ProductType.IDK;
-                break;
-            default:
-                System.out.println("Invalid option for the product type.");
-                return;
+            } else {
+                scanner.nextLine();
+                System.out.println("Invalid input. Please choose 1, 2, or 3.");
+            }
         }
 
-        System.out.print("Insert product price: ");
-        double price = scanner.nextDouble();
+        double price = 0;
+        while (true) {
+            System.out.print("Insert product price: ");
+            if (scanner.hasNextDouble()) {
+                price = scanner.nextDouble();
+                scanner.nextLine();
+                break;
+            } else {
+                scanner.nextLine();
+                System.out.println("Invalid price! Please insert a numeric value like 2.5");
+            }
+        }
 
         Product product = new Product(name, price, type);
-
-        vendingMachine.getCompartment().addProduct(product);
+        comp.addProduct(product);
+        System.out.println("Product added successfully!");
     }
+
 
     private static void showAllProducts(VendingMachine vendingMachine){
         List<Product> products=vendingMachine.getCompartment().getProducts();
