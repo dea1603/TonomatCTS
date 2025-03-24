@@ -13,18 +13,37 @@ public class Main {
         VendingMachine vm1=new VendingMachine("Tonomat 1 ","Acasa",new HotProductsCompartment(10));
         VendingMachine vm2=new VendingMachine("Tonomat 2 ","Acasa",new ColdProductsCompartment(10));
         VendingMachine vm3=new VendingMachine("Tonomat 3 ","Acasa",new HotProductsCompartment(10));
+        VendingMachine vm4=new VendingMachine("Tonomat 4 ","Acasa",new ColdProductsCompartment(10));
 
-        Product p1=new Product("Lays",12.55,ProductType.COLD);
-        Product p2=new Product("Lasagna",52.22,ProductType.WARM);
-        Product p3=new Product("Soup",12.55,ProductType.WARM);
+        Product p1 = new Product("Lasagna", 52.22, ProductType.WARM);
+        Product p2 = new Product("Pizza", 42.28, ProductType.WARM);
+        Product p3 = new Product("Soup", 12.55, ProductType.WARM);
 
-        vm2.getCompartment().addProduct(p1);
+        Product p4 = new Product("Fanta", 5.85, ProductType.COLD);
+        Product p5 = new Product("Pepsi", 7.96, ProductType.COLD);
+        Product p6 = new Product("Lays", 12.55, ProductType.COLD);
+
+        Product p7 = new Product("Covrigi", 10.28, ProductType.IDK);
+        Product p8 = new Product("Ciocolata", 6.50, ProductType.IDK);
+        Product p9 = new Product("Baton", 3.75, ProductType.IDK);
+
+        vm1.getCompartment().addProduct(p1);
         vm1.getCompartment().addProduct(p2);
         vm1.getCompartment().addProduct(p3);
+        vm1.getCompartment().addProduct(p7);
+
+        vm2.getCompartment().addProduct(p4);
+        vm2.getCompartment().addProduct(p5);
+        vm2.getCompartment().addProduct(p6);
+        vm2.getCompartment().addProduct(p8);
+
+        vm3.getCompartment().addProduct(new Product("Omleta", 18.90, ProductType.WARM));
+        vm3.getCompartment().addProduct(p9);
 
         vendingMachines.add(vm1);
         vendingMachines.add(vm2);
         vendingMachines.add(vm3);
+        vendingMachines.add(vm4);
 
         while (true) {
             System.out.println("\n=== Meniu ===");
@@ -117,28 +136,32 @@ public class Main {
         showAllVendingMachines();
 
         if (!vendingMachines.isEmpty()) {
-            System.out.print("Choose vending machine (pick a number): ");
+            while (true) {
+                System.out.print("Choose vending machine (write id): ");
 
-            if (scanner.hasNextInt()) {
-                int vendingMachineId = scanner.nextInt();
-                scanner.nextLine();
+                if (scanner.hasNextInt()) {
+                    int vendingMachineId = scanner.nextInt();
+                    scanner.nextLine();
 
-                VendingMachine vendingMachine = vendingMachines.stream()
-                        .filter(vm -> vm.getId() == vendingMachineId)
-                        .findFirst()
-                        .orElse(null);
+                    VendingMachine vendingMachine = vendingMachines.stream()
+                            .filter(vm -> vm.getId() == vendingMachineId)
+                            .findFirst()
+                            .orElse(null);
 
-                if (vendingMachine != null) {
-                    vendingMachineMenu(vendingMachine);
+                    if (vendingMachine != null) {
+                        vendingMachineMenu(vendingMachine);
+                        break;
+                    } else {
+                        System.out.println("There is no vending machine with the id " + vendingMachineId);
+                    }
                 } else {
-                    System.out.println("There is no vending machine with the id " + vendingMachineId);
+                    String invalidInput = scanner.next();
+                    System.out.println("There is no vending machine with the id " + invalidInput);
                 }
-            } else {
-                String invalidInput = scanner.next();
-                System.out.println("There is no vending machine with the id " + invalidInput);
             }
         }
     }
+
 
 
 
@@ -291,59 +314,154 @@ public class Main {
         }
     }
 
-    private static void deleteProduct(VendingMachine vendingMachine){
+    private static void deleteProduct(VendingMachine vendingMachine) {
         showAllProducts(vendingMachine);
 
-        System.out.print("Choose a product by ID: ");
-        int productId = scanner.nextInt();
+        if (vendingMachine.getCompartment().getProducts().isEmpty()) {
+            System.out.println("There are no products to delete.");
+            return;
+        }
 
-        vendingMachine.getCompartment().extractProduct(productId);
-    }
-    private static void buyProduct(VendingMachine vendingMachine){
-        System.out.println("Choose a payment method: ");
-        System.out.println("1. VISA");
-        System.out.println("2. MASTERCARD");
-        int option = scanner.nextInt();
-        if(option==1 || option==2){
-            showAllProducts(vendingMachine);
-
+        while (true) {
             System.out.print("Choose a product by ID: ");
-            int productId = scanner.nextInt();
 
-            Product product=vendingMachine.getCompartment().extractProduct(productId);
+            if (scanner.hasNextInt()) {
+                int productId = scanner.nextInt();
+                scanner.nextLine();
 
-            if (product!=null) {
-                SharedBankAccount sharedBankAccount=SharedBankAccount.getInstance();
-                sharedBankAccount.processPayment(product.getPrice());
+                boolean wasDeleted = vendingMachine.getCompartment().getProducts()
+                        .removeIf(product -> product.getId() == productId);
+
+                if (wasDeleted) {
+                    System.out.println("Product deleted successfully.");
+                    break;
+                } else {
+                    System.out.println("No product found with ID " + productId + ". Try again.");
+                }
+            } else {
+                String invalidInput = scanner.next();
+                System.out.println("Invalid input: " + invalidInput + ". Please enter a numeric ID.");
             }
-            else {
-                System.out.println("Selected product doesn't exist");
-            }
-
-        }
-        else {
-            System.out.println("Payment method is not valid");
         }
     }
 
-    private static void moveProduct(VendingMachine vendingMachine){
-        showAllProducts(vendingMachine);
 
-        System.out.print("Choose a product by ID: ");
-        int productId = scanner.nextInt();
 
-        showAllVendingMachines();
-        System.out.println("Choose in which vending machine to move the product: ");
-        int vendingMachineId=scanner.nextInt();
+    private static void buyProduct(VendingMachine vendingMachine) {
+        if (vendingMachine.getCompartment().getProducts().isEmpty()) {
+            System.out.println("There are no products to buy.");
+            return;
+        }
 
-        Product choosenProduct=vendingMachine.getCompartment().extractProduct(productId);
-        VendingMachine chosenVendingMachine=vendingMachines.stream()
-                .filter(vm -> vm.getId() == vendingMachineId)
-                .findFirst()
-                .orElse(null);
+        while (true) {
+            System.out.println("\nChoose a payment method:");
+            System.out.println("1. VISA");
+            System.out.println("2. MASTERCARD");
+            System.out.print("Enter option (1 or 2): ");
 
-        if(chosenVendingMachine!=null){
-            chosenVendingMachine.getCompartment().addProduct(choosenProduct);
+            if (scanner.hasNextInt()) {
+                int paymentOption = scanner.nextInt();
+                scanner.nextLine();
+
+                if (paymentOption == 1 || paymentOption == 2) {
+                    showAllProducts(vendingMachine);
+
+                    while (true) {
+                        System.out.print("Choose a product by ID: ");
+                        if (scanner.hasNextInt()) {
+                            int productId = scanner.nextInt();
+                            scanner.nextLine();
+
+                            Product product = vendingMachine.getCompartment().extractProduct(productId);
+                            if (product != null) {
+                                SharedBankAccount sharedBankAccount = SharedBankAccount.getInstance();
+                                sharedBankAccount.processPayment(product.getPrice());
+
+                                System.out.printf("You bought %s for %.2f RON. Thank you!%n", product.getName(), product.getPrice());
+                                return;
+                            } else {
+                                System.out.println("No product found with ID " + productId + ". Try again.");
+                            }
+                        } else {
+                            String invalid = scanner.next();
+                            System.out.println("Invalid input: " + invalid + ". Please enter a numeric ID.");
+                        }
+                    }
+
+                } else {
+                    System.out.println("Invalid payment method. Please choose 1 for VISA or 2 for MASTERCARD.");
+                }
+            } else {
+                String invalid = scanner.next();
+                System.out.println("Invalid input: " + invalid + ". Please enter 1 or 2.");
+            }
+        }
+    }
+
+
+    private static void moveProduct(VendingMachine vendingMachine) {
+
+        if (vendingMachine.getCompartment().getProducts().isEmpty()) {
+            System.out.println("There are no products to move.");
+            return;
+        }
+
+        Product chosenProduct = null;
+
+        while (chosenProduct == null) {
+            showAllProducts(vendingMachine);
+            System.out.print("Choose a product by ID: ");
+            if (scanner.hasNextInt()) {
+                int productId = scanner.nextInt();
+                scanner.nextLine();
+                chosenProduct = vendingMachine.getCompartment().extractProduct(productId);
+                if (chosenProduct == null) {
+                    System.out.println("No product found with ID " + productId);
+                }
+            } else {
+                System.out.println("Please enter a valid numeric product ID.");
+                scanner.next();
+            }
+        }
+
+        VendingMachine chosenVendingMachine = null;
+        while (chosenVendingMachine == null) {
+            showAllVendingMachines();
+            System.out.print("Choose the destination vending machine (write ID): ");
+            if (scanner.hasNextInt()) {
+                int vendingMachineId = scanner.nextInt();
+                scanner.nextLine();
+                chosenVendingMachine = vendingMachines.stream()
+                        .filter(vm -> vm.getId() == vendingMachineId)
+                        .findFirst()
+                        .orElse(null);
+
+                if (chosenVendingMachine == null) {
+                    System.out.println("No vending machine found with ID " + vendingMachineId);
+                }
+            } else {
+                System.out.println("Please enter a valid numeric vending machine ID.");
+                scanner.next();
+            }
+        }
+
+        Compartment destCompartment = chosenVendingMachine.getCompartment();
+        boolean compatible = false;
+
+        if (destCompartment instanceof HotProductsCompartment &&
+                (chosenProduct.getType() == ProductType.WARM || chosenProduct.getType() == ProductType.IDK)) {
+            compatible = true;
+        } else if (destCompartment instanceof ColdProductsCompartment &&
+                (chosenProduct.getType() == ProductType.COLD || chosenProduct.getType() == ProductType.IDK)) {
+            compatible = true;
+        }
+
+        if (compatible) {
+            destCompartment.addProduct(chosenProduct);
+            System.out.println("Product moved successfully!");
+        } else {
+            System.out.println("Incompatible product type. Product was not moved.");
+            vendingMachine.getCompartment().addProduct(chosenProduct);
         }
     }
 
