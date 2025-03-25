@@ -315,6 +315,7 @@ public class Main {
     }
 
     private static void deleteProduct(VendingMachine vendingMachine) {
+
         showAllProducts(vendingMachine);
 
         if (vendingMachine.getCompartment().getProducts().isEmpty()) {
@@ -329,10 +330,9 @@ public class Main {
                 int productId = scanner.nextInt();
                 scanner.nextLine();
 
-                boolean wasDeleted = vendingMachine.getCompartment().getProducts()
-                        .removeIf(product -> product.getId() == productId);
+                Product removedProduct = vendingMachine.getCompartment().extractProduct(productId);
 
-                if (wasDeleted) {
+                if (removedProduct != null) {
                     System.out.println("Product deleted successfully.");
                     break;
                 } else {
@@ -343,6 +343,8 @@ public class Main {
                 System.out.println("Invalid input: " + invalidInput + ". Please enter a numeric ID.");
             }
         }
+
+
     }
 
 
