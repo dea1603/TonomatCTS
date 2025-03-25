@@ -71,7 +71,7 @@ public class Main {
                         System.out.println("Invalid option! Please choose again.");
                 }
             } else {
-                String invalidInput = scanner.next();
+                scanner.nextLine();
                 System.out.println("Invalid input! Please choose again.");
             }
         }
@@ -84,12 +84,21 @@ public class Main {
         System.out.print("Insert the location of the vending machine: ");
         String location = scanner.nextLine();
 
-        System.out.println("Choose the maximum capacity of the compartment.");
-        System.out.print("Insert capacity: ");
-        int compartmentCapacity=scanner.nextInt();
-        scanner.nextLine();
+        int compartmentCapacity;
+        while (true) {
+            System.out.print("Insert compartment capacity : ");
+            if (scanner.hasNextInt()) {
+                compartmentCapacity = scanner.nextInt();
+                scanner.nextLine();
+                break;
+            } else {
+                scanner.nextLine();
+                System.out.println("Invalid capacity! Please insert a valid numeric value");
+            }
+        }
 
-        Compartment compartment = null;
+
+        Compartment compartment;
 
         while (true) {
             System.out.println("Choose compartment type:");
@@ -202,7 +211,7 @@ public class Main {
                         buyProduct(vendingMachine);
                         break;
                     case 0:
-                        System.out.println("Closing the application...");
+                        System.out.println("Exiting the vending machine menu...");
                         return;
                     default:
                         System.out.println("Invalid option! Please choose again.");
@@ -221,7 +230,7 @@ public class Main {
 
         Compartment compartment = vendingMachine.getCompartment();
 
-        double price = 0;
+        double price;
         while (true) {
             System.out.print("Insert product price: ");
             if (scanner.hasNextDouble()) {
@@ -234,7 +243,7 @@ public class Main {
             }
         }
 
-        ProductType type = null;
+        ProductType type;
 
         while (true) {
             System.out.println("Choose product type:");
@@ -273,8 +282,8 @@ public class Main {
 
 
         Product product = new Product(name, price, type);
-        if (vendingMachine.getCompartment().isCompatible(product)) {
-            vendingMachine.getCompartment().addProduct(product);
+        if (compartment.isCompatible(product)) {
+            compartment.addProduct(product);
             System.out.println("Product added successfully!");
         } else {
             System.out.println("This vending machine does not accept this product type.");
@@ -308,7 +317,7 @@ public class Main {
             Product mostExpensive = products.stream()
                     .max(Comparator.comparingDouble(Product::getPrice))
                     .orElse(null);
-            System.out.println(mostExpensive.toString());
+            System.out.println(mostExpensive);
         }
     }
 
@@ -344,7 +353,6 @@ public class Main {
 
 
     }
-
 
 
     private static void buyProduct(VendingMachine vendingMachine) {
