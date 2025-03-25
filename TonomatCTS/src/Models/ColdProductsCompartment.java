@@ -16,7 +16,10 @@ public class ColdProductsCompartment extends Compartment{
                 && products.size() < maxCapacity) {
             products.add(product);
         }
-        else {
-            System.out.println("Produsul nu se poate adauga!");
-        }    }
+    }
+
+    @Override
+    public boolean isCompatible(Product product) {
+        return product.getType() == ProductType.COLD || product.getType() == ProductType.IDK;
+    }
 }

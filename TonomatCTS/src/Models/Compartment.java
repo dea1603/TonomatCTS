@@ -12,6 +12,8 @@ public abstract class Compartment {
     }
 
     public abstract void addProduct(Product product);
+    public abstract boolean isCompatible(Product product);
+
 
     public Product extractProduct(int id) {
         for (Product p : products) {
