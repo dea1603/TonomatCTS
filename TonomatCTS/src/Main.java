@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Main {
     private static List<VendingMachine> vendingMachines = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
         VendingMachine vm1=new VendingMachine("Tonomat 1 ","Acasa",new HotProductsCompartment(10));
         VendingMachine vm2=new VendingMachine("Tonomat 2 ","Acasa",new ColdProductsCompartment(10));
@@ -46,7 +47,7 @@ public class Main {
         vendingMachines.add(vm4);
 
         while (true) {
-            System.out.println("\n=== Meniu ===");
+            System.out.println("\n=== Main Menu ===");
             System.out.println("1. Create a vending machine");
             System.out.println("2. Select a vending machine");
             System.out.println("0. Close the application");
@@ -218,9 +219,22 @@ public class Main {
         System.out.print("Insert product name: ");
         String name = scanner.nextLine();
 
+        Compartment compartment = vendingMachine.getCompartment();
+
+        double price = 0;
+        while (true) {
+            System.out.print("Insert product price: ");
+            if (scanner.hasNextDouble()) {
+                price = scanner.nextDouble();
+                scanner.nextLine();
+                break;
+            } else {
+                scanner.nextLine();
+                System.out.println("Invalid price! Please insert a numeric value like 2.5");
+            }
+        }
+
         ProductType type = null;
-        Compartment comp = vendingMachine.getCompartment();
-        boolean isHotCompartment = comp instanceof HotProductsCompartment;
 
         while (true) {
             System.out.println("Choose product type:");
@@ -235,18 +249,10 @@ public class Main {
 
                 switch (typeOption) {
                     case 1:
-                        if (!isHotCompartment) {
-                            System.out.println("This vending machine only accepts COLD or IDK products.");
-                            continue;
-                        }
                         type = ProductType.WARM;
                         break;
 
                     case 2:
-                        if (isHotCompartment) {
-                            System.out.println("This vending machine only accepts WARM or IDK products.");
-                            continue;
-                        }
                         type = ProductType.COLD;
                         break;
 
@@ -265,22 +271,14 @@ public class Main {
             }
         }
 
-        double price = 0;
-        while (true) {
-            System.out.print("Insert product price: ");
-            if (scanner.hasNextDouble()) {
-                price = scanner.nextDouble();
-                scanner.nextLine();
-                break;
-            } else {
-                scanner.nextLine();
-                System.out.println("Invalid price! Please insert a numeric value like 2.5");
-            }
-        }
 
         Product product = new Product(name, price, type);
-        comp.addProduct(product);
-        System.out.println("Product added successfully!");
+        if (vendingMachine.getCompartment().isCompatible(product)) {
+            vendingMachine.getCompartment().addProduct(product);
+            System.out.println("Product added successfully!");
+        } else {
+            System.out.println("This vending machine does not accept this product type.");
+        }
     }
 
 
@@ -447,26 +445,16 @@ public class Main {
             }
         }
 
-        Compartment destCompartment = chosenVendingMachine.getCompartment();
-        boolean compatible = false;
+        Compartment destinationCompartment=chosenVendingMachine.getCompartment();
 
-        if (destCompartment instanceof HotProductsCompartment &&
-                (chosenProduct.getType() == ProductType.WARM || chosenProduct.getType() == ProductType.IDK)) {
-            compatible = true;
-        } else if (destCompartment instanceof ColdProductsCompartment &&
-                (chosenProduct.getType() == ProductType.COLD || chosenProduct.getType() == ProductType.IDK)) {
-            compatible = true;
-        }
-
-        if (compatible) {
-            destCompartment.addProduct(chosenProduct);
+        if (destinationCompartment.isCompatible(chosenProduct)) {
+            destinationCompartment.addProduct(chosenProduct);
             System.out.println("Product moved successfully!");
         } else {
             System.out.println("Incompatible product type. Product was not moved.");
-            vendingMachine.getCompartment().addProduct(chosenProduct);
+            destinationCompartment.addProduct(chosenProduct);
         }
     }
-
 }
 
 
