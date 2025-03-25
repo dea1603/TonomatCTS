@@ -18,35 +18,10 @@ public class VendingMachine {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void setCompartment(Compartment compartment) {
-        this.compartment = compartment;
-    }
-
-    public void displayProducts() {
-        for (Product p : compartment.getProducts()) {
-            System.out.println(p);
-        }
-    }
 
     public Compartment getCompartment() {
         return compartment;

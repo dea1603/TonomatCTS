@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static List<VendingMachine> vendingMachines = new ArrayList<>();
-    private static Scanner scanner = new Scanner(System.in);
+    private static final List<VendingMachine> vendingMachines = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         VendingMachine vm1=new VendingMachine("Tonomat 1 ","Acasa",new HotProductsCompartment(10));

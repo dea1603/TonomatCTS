@@ -2,7 +2,6 @@ package Models;
 
 import Enums.ProductType;
 
-import java.util.List;
 
 public class ColdProductsCompartment extends Compartment{
 

@@ -2,8 +2,6 @@ package Models;
 
 import Enums.ProductType;
 
-import java.util.List;
-
 public class HotProductsCompartment extends Compartment {
 
     public HotProductsCompartment( int maxCapacity) {

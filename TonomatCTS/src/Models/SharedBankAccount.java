@@ -1,10 +1,8 @@
 package Models;
 
 public class SharedBankAccount {
-
     private static SharedBankAccount instance = null;
     private double balance = 0.0;
-
 
     private SharedBankAccount() {}
 
@@ -23,9 +21,5 @@ public class SharedBankAccount {
         } else {
             System.out.println("Cannot deposit a negative or zero amount.");
         }
-    }
-
-    public void displayBalance() {
-        System.out.printf("Current Shared Account Balance: %.2f RON%n", balance);
     }
 }
